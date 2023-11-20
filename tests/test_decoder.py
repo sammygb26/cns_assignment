@@ -2,7 +2,7 @@ from decoders import *
 
 def test_get_cumulative_counts():
     N = np.ones(10)
-    assert np.all(get_cumulative_counts(N[:,None]) == np.arange(1, 11, 1))
+    assert np.all(get_cumulative_counts(N[:,None]) == np.arange(1, 11, 1)[:,None])
 
 def test_winner_take_all_decode():
     N = np.eye(10)

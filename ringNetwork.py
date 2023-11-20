@@ -7,8 +7,7 @@ class RingNetwork:
         self.N = N
         self.s = np.linspace(-np.pi / 2, np.pi / 2, N+1)[:-1] 
 
-        S = np.repeat(np.reshape(self.s, (N, 1)), N, axis=1)
-        self.W = W1 * np.cos(2*(S - S.T)) + W0
+        self.W = W1 * np.cos(2*(self.s[:,None] - self.s[None,:])) + W0
 
     def simulate(self, s=0, dt=1, T=500, V0=0, tau=50, beta=0.1, sigma=0.1, u0=0.5, u1=0.5, seed=1, verbose=False):
         n_timesteps = int(T/dt + 0.5)

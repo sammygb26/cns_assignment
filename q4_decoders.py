@@ -2,23 +2,43 @@ import matplotlib.pyplot as plt
 
 from ringNetwork import RingNetwork
 from decoders import *
-from tqdm import trange
 
-fig, (ax1, ax2, ax3) = plt.subplots(1,3)
+fig, axs = plt.subplots(2,3, figsize=(16, 8))
+
+ax1 = [axs[0,0], axs[1,0]]
+ax2 = [axs[0,1], axs[1,1]]
+ax3 = [axs[0,2], axs[1,2]]
 
 def simulate(W0, W1, ax):
     rn = RingNetwork(100, W0, W1)
 
-    V, N = rn.simulate()
+    _, N = rn.simulate(verbose=True)
 
     Nc = get_cumulative_counts(N)
 
     wta = winner_take_all_decode(Nc, rn.s)
     pv = population_vector_decode(Nc, rn.s, angle_multipltier=2)
 
-    ax.plot(wta, label="Winner Take All")
-    ax.plot(pv, label="Population Vector")
-    
+    wta_cmse = get_cumulative_mse(wta, 0)
+    pv_cmse = get_cumulative_mse(pv, 0)
 
+    ax[0].plot(wta_cmse, label="Winner Take All")
+    ax[0].plot(pv_cmse, label="Population Vector")
+    ax[0].set_xlabel("Time (ms)")
+    ax[0].set_ylabel("Cumulative MSE")
+    ax[0].legend()
+
+    ax[1].plot(wta, label="Winner Take All")
+    ax[1].plot(pv, label="Population Vector")
+    ax[1].set_xlabel("Time (ms)")
+    ax[0].set_ylabel("MSE")
+    ax[1].legend()
+
+simulate(0, 0, ax1)
+simulate(-4, 0, ax2)
+simulate(-10, 11, ax3)
+
+fig.suptitle(f"Cumulative MSE For Decoded Value", fontsize=16)
+plt.savefig("q4.png", dpi=600)    
 
     
