@@ -19,5 +19,12 @@ def test_population_vector_decode():
 
     N2 = np.cos(s1[:,None] - s1[None,:])
 
-    assert np.all(winner_take_all_decode(N1, s1) == s1)
-    assert np.all(winner_take_all_decode(N2, s1) == s1)
+    assert np.allclose(population_vector_decode(N1, s1), s1)
+    assert np.allclose(population_vector_decode(N2, s1), s1)
+
+    s2 = np.linspace(-np.pi / 2, np.pi / 2, 11)[:-1]
+    N3 = np.cos(2 * (s2[:,None] - s2[None,:]))
+    assert not np.allclose(population_vector_decode(N3, s2), s2)
+
+    d2 = population_vector_decode(N3, s2, angle_multipltier=2)
+    assert np.allclose(d2, s2)
