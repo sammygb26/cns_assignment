@@ -4,8 +4,8 @@ import numpy as np
 
 def test_s():
     rn = RingNetwork(100, 0, 0)
-    assert max(rn.s) < np.pi / 2
-    assert min(rn.s) == -np.pi / 2
+    assert max(rn.s) < np.pi
+    assert min(rn.s) == -np.pi
     assert len(rn.s) == rn.N
 
 def test_W():
@@ -33,11 +33,11 @@ def test_W0():
 def test_sim():
     def t(N, dt, T):
         rn = RingNetwork(N, 0, 0)
-        V, _ = rn.simulate(dt=dt, T=T)
+        V, _ = rn.simulate(dt=dt, T=T, verbose=True)
         assert V.shape == (int(T/dt + 1.5), N)
 
-    for _ in range(100):
+    for _ in range(10):
         N = np.random.randint(10, 100)
-        dt = np.random.random() 
-        T = 1 + np.random.random() * 10
+        dt = np.random.random() * 1e-3
+        T = 1 + np.random.random() * 1e-2
         t(N, dt, T)

@@ -5,7 +5,7 @@ import random
 from ringNetwork import RingNetwork
 from tqdm import trange
 
-fig, (ax1, ax2, ax3) = plt.subplots(3)
+fig, ax = plt.subplots()
 
 fig.set_figheight(9)
 fig.set_figwidth(9)
@@ -21,15 +21,14 @@ def simulate(W0, W1, ax):
     Va = np.mean(Vs, axis=0)
     V_tune = np.mean(Va[t:t+Dt, :], axis=0)
 
-    ax.plot(V_tune)
+    ax.plot(V_tune, label=f"$W_0={W0}$ $W_1={W1}$")
     ax.set_xlabel("Neuron")
     ax.set_ylabel("V")
-    ax.set_title(f"$W_0={W0}$ $W_1={W1}$")
     
 
-simulate(0, 0, ax1)
-simulate(-4, 0, ax2)
-simulate(-10, 11, ax3)
+simulate(0, 0, ax)
+simulate(-4, 0, ax)
+simulate(-10, 11, ax)
 
 fig.suptitle(f"From t={t}ms to t={t + Dt}ms, {n_runs} repetitions", fontsize=16)
 plt.tight_layout()
