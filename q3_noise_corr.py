@@ -24,10 +24,9 @@ def simulate(W0, W1, ax):
     rn = RingNetwork(100, W0, W1)
     res = np.array([rn.simulate(seed=random.randint(0,65536)) for _ in trange(n_runs)])
 
-    Vs = res[:,0,:,:]
     Ns = res[:,1,:,:]
 
-    Va = np.mean(Vs, axis=0)
+    Na = np.mean(Ns, axis=0)
 
     Nbs = np.sum(Ns[:,-t:,:], axis=1)
     Nba = np.mean(Nbs, axis=0)
@@ -46,10 +45,12 @@ def simulate(W0, W1, ax):
     ax[1].set_ylabel("$\\langle\\bar n_i\\rangle$")
 
     ax[2].imshow(
-        Va, 
+        Na, 
         interpolation='nearest', 
         aspect='auto', 
         origin='lower')
+    ax[2].set_xlabel("Neuron")
+    ax[2].set_ylabel("Time (ms)")
 
 simulate(0, 0, ax1)
 simulate(-4, 0, ax2)
