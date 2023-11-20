@@ -2,6 +2,13 @@ import numpy as np
 
 from ringNetwork import RingNetwork
 
+def get_mse(pred, act):
+    return np.power(pred - act, 2)
+
+def get_cumulative_mse(pred, act):
+    mse = get_mse(pred, act)
+    return np.array([np.sum(mse[:i+1]) for i in range(len(pred))])
+
 def get_cumulative_counts(N):
     return np.array([np.sum(N[:i+1,:]) for i in range(N.shape[0])])
 
