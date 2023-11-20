@@ -5,14 +5,12 @@ import random
 from ringNetwork import RingNetwork
 from tqdm import trange
 
-fig, axs = plt.subplots(3,3, figsize=(32, 16))
+fig, axs = plt.subplots(3,3, figsize=(9, 9))
 
 ax1 = [axs[0,0], axs[1,0], axs[2,0]]
 ax2 = [axs[0,1], axs[1,1], axs[2,1]]
 ax3 = [axs[0,2], axs[1,2], axs[2,2]]
 
-fig.set_figheight(9)
-fig.set_figwidth(9)
 
 t = 100
 n_runs = 100

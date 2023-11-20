@@ -11,7 +11,7 @@ def simulate(W0, W1, ax):
     V, _ = rn.simulate(verbose=True)
 
     ax.imshow(V.T)
-    ax.set_xlabel("Time (s)")
+    ax.set_xlabel("Time (ms)")
     ax.set_ylabel("Neuron")
     ax.set_title(f"$W_0={W0}$ $W_1={W1}$")
 
