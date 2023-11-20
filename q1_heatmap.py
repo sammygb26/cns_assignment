@@ -8,7 +8,7 @@ fig.set_figwidth(9)
 
 def simulate(W0, W1, ax):
     rn = RingNetwork(100, W0, W1)
-    V = rn.simulate(verbose=True)
+    V, _ = rn.simulate(verbose=True)
 
     ax.imshow(V.T)
     ax.set_xlabel("Time (s)")

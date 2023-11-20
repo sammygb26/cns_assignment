@@ -16,7 +16,7 @@ n_runs = 40
 
 def simulate(W0, W1, ax):
     rn = RingNetwork(100, W0, W1)
-    Vs = np.array([rn.simulate(seed=random.randint(0,65536)) for _ in trange(n_runs)])
+    Vs = np.array([rn.simulate(seed=random.randint(0,65536))[0] for _ in trange(n_runs)])
 
     Va = np.mean(Vs, axis=0)
     V_tune = np.mean(Va[t:t+Dt, :], axis=0)
