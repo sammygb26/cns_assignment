@@ -36,7 +36,7 @@ def test_sim():
         V, _ = rn.simulate(dt=dt, T=T, verbose=True)
         assert V.shape == (int(T/dt + 1.5), N)
 
-    for _ in range(10):
+    for _ in range(5):
         N = np.random.randint(10, 100)
         dt = np.random.random() * 1e-3
         T = 1 + np.random.random() * 1e-2

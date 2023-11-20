@@ -4,6 +4,10 @@ def test_get_cumulative_counts():
     N = np.ones(10)
     assert np.all(get_cumulative_counts(N[:,None]) == np.arange(1, 11, 1)[:,None])
 
+    N = np.ones(10)
+    faux_cumulative = get_cumulative_counts(N[:,None], window=1)
+    assert np.all(faux_cumulative == np.ones(10)[:,None])
+
 def test_winner_take_all_decode():
     N = np.eye(10)
     s1 = np.arange(0, 10, 1)

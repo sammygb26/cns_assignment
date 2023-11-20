@@ -9,12 +9,14 @@ ax1 = [axs[0,0], axs[1,0]]
 ax2 = [axs[0,1], axs[1,1]]
 ax3 = [axs[0,2], axs[1,2]]
 
+window = 50
+
 def simulate(W0, W1, ax):
     rn = RingNetwork(100, W0, W1)
 
     _, N = rn.simulate(verbose=True)
 
-    Nc = get_cumulative_counts(N)
+    Nc = get_cumulative_counts(N, window=50)
 
     wta = winner_take_all_decode(Nc, rn.s)
     pv = population_vector_decode(Nc, rn.s, angle_multipltier=2)
@@ -39,6 +41,6 @@ simulate(-4, 0, ax2)
 simulate(-10, 11, ax3)
 
 fig.suptitle(f"Cumulative MSE For Decoded Value", fontsize=16)
-plt.savefig("q4.png", dpi=600)    
+plt.savefig("q6.png", dpi=600)    
 
     
