@@ -34,20 +34,24 @@ def simulate(W0, W1, ax):
     Sa = np.mean(Ss, axis=0)
 
     ax[0].imshow(Sa)
-    ax[0].set_xlabel("Neuron")
-    ax[0].set_ylabel("Neuron")
+    ax[0].set_ylabel("Neuron Tuning ($s_i$)")
+    ax[0].set_yticks([0, rn.N // 2, rn.N], ["$-\\pi$", "$0$", "$\\pi$"])
+    ax[0].set_xlabel("Neuron Tuning ($s_i$)")
+    ax[0].set_xticks([0, rn.N // 2, rn.N], ["$-\\pi$", "$0$", "$\\pi$"])
     ax[0].set_title(f"$W_0={W0}$ $W_1={W1}$")
 
     ax[1].plot(Nba)
-    ax[1].set_xlabel("Neuson")
     ax[1].set_ylabel("$\\langle\\bar n_i\\rangle$")
+    ax[1].tick_params(axis='x', left = False, right = False , labelleft = False , 
+                labelbottom = False, bottom = False)
 
     ax[2].imshow(
         Na, 
         interpolation='nearest', 
         aspect='auto', 
         origin='lower')
-    ax[2].set_xlabel("Neuron")
+    ax[2].set_xlabel("Neuron Tuning ($s_i$)")
+    ax[2].set_xticks([0, rn.N // 2, rn.N], ["$-\\pi$", "$0$", "$\\pi$"])
     ax[2].set_ylabel("Time (ms)")
 
 simulate(0, 0, ax1)
