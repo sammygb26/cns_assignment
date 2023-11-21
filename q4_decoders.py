@@ -12,7 +12,7 @@ ax3 = [axs[0,2], axs[1,2]]
 def simulate(W0, W1, ax):
     rn = RingNetwork(100, W0, W1)
 
-    _, N = rn.simulate(verbose=True)
+    _, N, _, _ = rn.simulate(verbose=True)
 
     Nc = get_cumulative_counts(N)
 

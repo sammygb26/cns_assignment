@@ -14,9 +14,9 @@ window = 50
 def simulate(W0, W1, ax):
     rn = RingNetwork(100, W0, W1)
 
-    _, N, _ = rn.simulate(verbose=True)
+    _, N, _, _ = rn.simulate(verbose=True)
 
-    Nc = get_cumulative_counts(N, window=50)
+    Nc = get_cumulative_counts(N, window=25)
 
     wta = winner_take_all_decode(Nc, rn.s)
     pv = population_vector_decode(Nc, rn.s)
@@ -33,7 +33,7 @@ def simulate(W0, W1, ax):
     ax[1].plot(wta, label="Winner Take All")
     ax[1].plot(pv, label="Population Vector")
     ax[1].set_xlabel("Time (ms)")
-    ax[1].set_ylabel("MSE")
+    ax[1].set_ylabel("Error")
     ax[1].legend()
 
 simulate(0, 0, ax1)

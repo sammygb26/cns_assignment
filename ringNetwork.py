@@ -34,7 +34,7 @@ class RingNetwork:
 
             dv_tdt = -v + self.W @ n + _in 
 
-            V[i,:] = v + dt * dv_tdt / tau
+            V[i,:] = v + dt * (dv_tdt / tau)
             N[i,:] = n
             R[i,:] = r
             I[i,:] = _in
