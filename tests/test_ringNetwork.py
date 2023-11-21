@@ -33,7 +33,7 @@ def test_W0():
 def test_sim():
     def t(N, dt, T):
         rn = RingNetwork(N, 0, 0)
-        V, _ = rn.simulate(dt=dt, T=T, verbose=True)
+        V, _, _, _ = rn.simulate(dt=dt, T=T, verbose=True)
         assert V.shape == (int(T/dt + 1.5), N)
 
     for _ in range(5):
