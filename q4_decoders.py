@@ -14,24 +14,24 @@ def simulate(W0, W1, ax):
 
     _, N, _, _ = rn.simulate(verbose=True)
 
-    Nc = get_cumulative_counts(N)
+    Nc = get_cumulative_counts(N, remove_zeros=True)
 
     wta = winner_take_all_decode(Nc, rn.s)
     pv = population_vector_decode(Nc, rn.s, angle_multipltier=2)
 
-    wta_cmse = get_cumulative_mse(wta, 0)
-    pv_cmse = get_cumulative_mse(pv, 0)
+    wta_mse = get_mse(rad2deg(wta), 0)
+    pv_mse = get_mse(rad2deg(pv), 0)
 
-    ax[0].plot(wta_cmse, label="Winner Take All")
-    ax[0].plot(pv_cmse, label="Population Vector")
+    ax[0].plot(wta_mse, label="Winner Take All")
+    ax[0].plot(pv_mse, label="Population Vector")
     ax[0].set_xlabel("Time (ms)")
-    ax[0].set_ylabel("Cumulative MSE")
+    ax[0].set_ylabel("MSE (deg${}^2$)")
     ax[0].legend()
 
     ax[1].plot(wta, label="Winner Take All")
     ax[1].plot(pv, label="Population Vector")
     ax[1].set_xlabel("Time (ms)")
-    ax[0].set_ylabel("MSE")
+    ax[1].set_ylabel("Error (deg)")
     ax[1].legend()
 
 simulate(0, 0, ax1)

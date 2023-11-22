@@ -1,26 +1,33 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import random
+import colormaps as cmaps
 
 from ringNetwork import RingNetwork
 from tqdm import trange
 
-fig, axs = plt.subplots(2,4, figsize=(16, 6))
+fig, axs = plt.subplots(2,4, figsize=(16, 9))
 
 ax1 = [axs[0,0], axs[1, 0]]
 ax2 = [axs[0,1], axs[1, 1]]
 ax3 = [axs[0,2], axs[1, 2]]
 ax4 = [axs[0,3], axs[1, 3]]
 
-t = 300
-Dt = 200
-n_runs = 100
+t = 400
+Dt = 100
+n_runs = 400
 
 def plot_Nt_Na(Nt, Na, ax, N):
-    ax[0].plot(Nt / 0.001)
-    ax[0].set_ylabel("$\\langle n/\\delta t\\rangle$")
+    colors = cmaps.matter.discrete(500 // Dt + 4).colors
 
-    ax[1].imshow(Na / 0.001, interpolation='nearest', aspect='auto', origin='lower') # Need to average over window
+    for i in range(500 // Dt):
+        Nt = np.mean(Na[i*Dt:i*Dt+Dt,:], axis=0)
+        ax[0].plot(Nt / 0.001, label=f"${i*Dt}-{i*Dt+Dt}$", c=colors[2+i])
+        ax[0].set_ylabel("$\\langle n/\\delta t\\rangle$")
+        ax[0].tick_params(axis='x', left = False, right = False , labelleft = False , 
+                labelbottom = False)
+        ax[0].legend()
+
+    ax[1].imshow(Na / 0.001, interpolation='nearest', aspect='auto', origin='lower', cmap='plasma') # Need to average over window
     ax[1].set_xticks([0, N // 2, N], ["$-\\pi$", "$0$", "$\\pi$"])
     ax[1].set_ylabel("Time (ms)")
 
@@ -40,7 +47,8 @@ Nt1, Na1 = simulate(0, 0, ax1, ax4)
 Nt2, Na2 = simulate(-4, 0, ax2, ax4)
 Nt3, Na3 = simulate(-10, 11, ax3, ax4)
 
-Nta = np.array([Nt1, Nt2, Nt3])
+M = max(np.block([Nt1, Nt2, Nt3]))
+Nta = np.array([Nt1 / max(Nt1), Nt2 / max(Nt2), Nt3 / max(Nt3)])
 Nta = np.moveaxis(Nta, 0, -1)
 
 Naa = np.array([Na1, Na2, Na3])
@@ -49,9 +57,10 @@ Naa = np.moveaxis(Naa, 0, -1)
 plot_Nt_Na(Nt1, Naa, ax4, 100)
 
 ax4[0].cla()
-ax4[0].plot(Nt1 / 0.001, c='r')
-ax4[0].plot(Nt2 / 0.001, c='g')
-ax4[0].plot(Nt3 / 0.001, c='b')
+ax4[0].plot(Nt1 / 0.001, c='r', label='F')
+ax4[0].plot(Nt2 / 0.001, c='g', label='UI')
+ax4[0].plot(Nt3 / 0.001, c='b', label='SR')
+ax4[0].legend()
 
 fig.suptitle(f"From t={t}ms to t={t + Dt}ms, {n_runs} repetitions", fontsize=16)
 fig.tight_layout()

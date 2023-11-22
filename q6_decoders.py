@@ -16,18 +16,18 @@ def simulate(W0, W1, ax):
 
     _, N, _, _ = rn.simulate(verbose=True)
 
-    Nc = get_cumulative_counts(N, window=25)
+    Nc = get_cumulative_counts(N, window=25, remove_zeros=True)
 
-    wta = winner_take_all_decode(Nc, rn.s)
-    pv = population_vector_decode(Nc, rn.s)
+    wta = rad2deg(winner_take_all_decode(Nc, rn.s))
+    pv = rad2deg(population_vector_decode(Nc, rn.s))
 
-    wta_cmse = get_cumulative_mse(wta, 0)
-    pv_cmse = get_cumulative_mse(pv, 0)
+    wta_cmse = get_mse(wta, 0)
+    pv_cmse = get_mse(pv, 0)
 
     ax[0].plot(wta_cmse, label="Winner Take All")
     ax[0].plot(pv_cmse, label="Population Vector")
     ax[0].set_xlabel("Time (ms)")
-    ax[0].set_ylabel("Cumulative MSE")
+    ax[0].set_ylabel("MSE (deg${}^2$)")
     ax[0].legend()
 
     ax[1].plot(wta, label="Winner Take All")
