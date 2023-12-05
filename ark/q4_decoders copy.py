@@ -31,11 +31,11 @@ def simulate(W0, W1, ax):
 
     nonzeros = np.sum(Ncs, axis=-1) != 0
 
-    wta_mse = get_mse(rad2deg(wta), 0)
-    wtas_mse = np.mean(get_mse(rad2deg(wtas), 0), axis=1, where=nonzeros)
+    wta_mse = get_rmse(rad2deg(wta), 0)
+    wtas_mse = np.mean(get_rmse(rad2deg(wtas), 0), axis=1, where=nonzeros)
 
-    pv_mse = get_mse(rad2deg(pv), 0)
-    pvs_mse = np.mean(get_mse(rad2deg(pvs), 0), axis=1, where=nonzeros)
+    pv_mse = get_rmse(rad2deg(pv), 0)
+    pvs_mse = np.mean(get_rmse(rad2deg(pvs), 0), axis=1, where=nonzeros)
 
     ax[0].plot(wta_mse, label="Winner Take All")
     ax[0].plot(pv_mse, label="Population Vector")

@@ -4,23 +4,18 @@ from tqdm import trange
 from ringNetwork import RingNetwork
 from decoders import *
 
-fig = plt.figure(figsize=(9,6))
-
-ax1 = fig.add_subplot(234)
-ax2 = fig.add_subplot(235)
-ax3 = fig.add_subplot(236)
-
-ax4 = fig.add_subplot(231)
-ax5 = fig.add_subplot(232)
+fig, ((ax3, ax4), (ax1, ax2)) = plt.subplots(2, 2, figsize=(6,2))
 
 n_runs = 1000
+window = 25
 
-def simulate(W0, W1, ax, regime):
+def simulate(W0, W1, min_weight, ax, regime):
     rn = RingNetwork(100, W0, W1)
-    res = np.array([rn.simulate() for _ in trange(n_runs)])
+    rn.W = np.maximum(min_weight, rn.W)
+    res = np.array([rn.simulate(T=0.5) for _ in trange(n_runs)])
 
     Ns = res[:,1,:,:]
-    Ncs = get_cumulative_counts(Ns, remove_zeros=True, axis=1)[10:]
+    Ncs = get_cumulative_counts(Ns, remove_zeros=True, axis=1, window=window)[window:]
 
     wta = winner_take_all_decode(Ncs, rn.s)
     pv = population_vector_decode(Ncs, rn.s)
@@ -51,31 +46,28 @@ def simulate(W0, W1, ax, regime):
     ax.set_title(regime)
     ax.legend()
 
-    ax4.plot(wta_msea, label=regime)
-    ax4.fill_between(np.array([i for i in range(len(wta_mse))]), 
+    ax3.plot(wta_msea, label=regime)
+    ax3.fill_between(np.array([i for i in range(len(wta_mse))]), 
                     wta_msea-wta_lower_error, wta_msea+wta_upper_error,
                     alpha=.1)
-    ax5.plot(pv_msea, label=regime)
-    ax5.fill_between(np.array([i for i in range(len(pv_mse))]), 
+    ax4.plot(pv_msea, label=regime)
+    ax4.fill_between(np.array([i for i in range(len(pv_mse))]), 
                     pv_msea-pv_lower_error, pv_msea+pv_upper_error,
                     alpha=.1)
 
-simulate(0, 0, ax1, "F")
-simulate(-4, 0, ax2, "UI")
-simulate(-10, 11, ax3, "SR")
+simulate(-10, 11, -21, ax1, "SR")
+simulate(-10, 11, -1, ax2, "SR${}^*$")
 
-ax4.set_title("Winner Take All")
+ax3.set_title("Winner Take All")
+ax3.set_xlabel("Time (ms)")
+ax3.set_ylabel("Average $\\sqrt{\\text{MSE}}$ (deg${}^2$)")
+ax3.legend()
+
+ax4.set_title("Population Vector")
 ax4.set_xlabel("Time (ms)")
 ax4.set_ylabel("Average $\\sqrt{\\text{MSE}}$ (deg${}^2$)")
 ax4.legend()
 
-ax5.set_title("Population Vector")
-ax5.set_xlabel("Time (ms)")
-ax5.set_ylabel("Average $\\sqrt{\\text{MSE}}$ (deg${}^2$)")
-ax5.legend()
-
-fig.suptitle(f"MSE For Decodes With Cumulative Counts (runs={n_runs})", fontsize=16)
+fig.suptitle(f"MSE For Decodes With Window (runs={n_runs}, $\\Delta t={window}ms$)", fontsize=16)
 fig.tight_layout()
-plt.savefig("q4.png", dpi=600)    
-
-    
+plt.savefig("q7(2).png", dpi=600) 

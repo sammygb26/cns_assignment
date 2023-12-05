@@ -13,26 +13,26 @@ ax3 = fig.add_subplot(236)
 ax4 = fig.add_subplot(231)
 ax5 = fig.add_subplot(232)
 
-n_runs = 200
+n_runs = 1000
 window = 25
 
 def simulate(W0, W1, ax, regime):
     rn = RingNetwork(100, W0, W1)
-    res = np.array([rn.simulate() for _ in trange(n_runs)])
+    res = np.array([rn.simulate(T=5) for _ in trange(n_runs)])
 
     Ns = res[:,1,:,:]
-    Ncs = get_cumulative_counts(Ns, remove_zeros=True, axis=1, window=window)[10:]
+    Ncs = get_cumulative_counts(Ns, remove_zeros=True, axis=1, window=window)[window:]
 
     wta = winner_take_all_decode(Ncs, rn.s)
     pv = population_vector_decode(Ncs, rn.s)
 
     nonzeros = np.sum(Ncs, axis=-1) != 0
-    wta_mse = get_mse(rad2deg(wta), 0)
+    wta_mse = get_rmse(rad2deg(wta), 0)
     wta_msea = np.mean(wta_mse, axis=1, where=nonzeros)
     wta_lower_error = np.std(wta_mse, axis=1, where=wta_mse < wta_msea[:,None])
     wta_upper_error = np.std(wta_mse, axis=1, where=wta_mse > wta_msea[:,None])
 
-    pv_mse = get_mse(rad2deg(pv), 0)
+    pv_mse = get_rmse(rad2deg(pv), 0)
     pv_msea = np.mean(pv_mse, axis=1, where=nonzeros)
     pv_lower_error = np.std(pv_mse, axis=1, where=pv_mse < pv_msea[:,None])
     pv_upper_error = np.std(pv_mse, axis=1, where=pv_mse > pv_msea[:,None])
@@ -48,7 +48,7 @@ def simulate(W0, W1, ax, regime):
                     alpha=.1)
 
     ax.set_xlabel("Time (ms)")
-    ax.set_ylabel("Average MSE (deg${}^2$)")
+    ax.set_ylabel("Average $\\sqrt{\\text{MSE}}$ (deg${}^2$)")
     ax.set_title(regime)
     ax.legend()
 
@@ -67,15 +67,15 @@ simulate(-10, 11, ax3, "SR")
 
 ax4.set_title("Winner Take All")
 ax4.set_xlabel("Time (ms)")
-ax4.set_ylabel("Average MSE (deg${}^2$)")
+ax4.set_ylabel("Average $\\sqrt{\\text{MSE}}$ (deg${}^2$)")
 ax4.legend()
 
 ax5.set_title("Population Vector")
 ax5.set_xlabel("Time (ms)")
-ax5.set_ylabel("Average MSE (deg${}^2$)")
+ax5.set_ylabel("Average $\\sqrt{\\text{MSE}}$ (deg${}^2$)")
 ax5.legend()
 
-fig.suptitle(f"MSE For Decodes With Window (runs={n_runs}, $\\Delta t={window}$)", fontsize=16)
+fig.suptitle(f"MSE For Decodes With Window (runs={n_runs}, $\\Delta t={window}ms$)", fontsize=16)
 fig.tight_layout()
 plt.savefig("q6.png", dpi=600)    
 

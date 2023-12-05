@@ -1,15 +1,13 @@
 import numpy as np
 
-from ringNetwork import RingNetwork
-
 def rad2deg(x):
     return (x / np.pi) * 180
 
-def get_mse(pred, act):
-    return np.power(pred - act, 2)
+def get_rmse(pred, act):
+    return np.abs(pred - act)
 
 def get_cumulative_mse(pred, act):
-    mse = get_mse(pred, act)
+    mse = get_rmse(pred, act)
     return np.array([np.sum(mse[:i+1]) for i in range(len(pred))])
 
 def get_cumulative_counts(N, window=0, remove_zeros=False, axis=0):

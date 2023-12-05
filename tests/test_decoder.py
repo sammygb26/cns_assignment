@@ -37,15 +37,15 @@ def test_get_mse():
     pred1 = np.zeros(10)
     act2 = 0
     
-    assert np.allclose(get_mse(pred1, act2), np.zeros(10))
+    assert np.allclose(get_rmse(pred1, act2), np.zeros(10))
     assert np.allclose(get_cumulative_mse(pred1, act2), np.zeros(10))
 
     pred2 = np.ones(10)
 
-    assert np.allclose(get_mse(pred2, act2), np.ones(10))
+    assert np.allclose(get_rmse(pred2, act2), np.ones(10))
     assert np.allclose(get_cumulative_mse(pred2, act2), np.arange(1,11,1))
 
     act3 = 5
     pred3 = np.arange(0,10,1)
 
-    assert np.allclose(get_mse(pred3, act3), np.power(np.arange(-5,5,1),2))
+    assert np.allclose(get_rmse(pred3, act3), np.power(np.arange(-5,5,1),2))

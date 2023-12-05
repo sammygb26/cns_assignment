@@ -2,12 +2,19 @@ import numpy as np
 
 from tqdm import trange
 
+def exp_model(x):
+    x = np.abs(x)
+    return 2 * ((1-x/np.pi)*np.exp(-x)) - 1
+
 class RingNetwork:
     def __init__(self, N, W0, W1):
         self.N = N
         self.s = np.linspace(-np.pi, np.pi, N+1)[:-1] 
 
         self.W = W1 * np.cos(self.s[:,None] - self.s[None,:]) + W0
+        #self.W = np.maximum(-0.5, self.W)
+
+                
 
     def simulate(self, s=0, dt=0.001, T=0.5, V0=0, tau=0.05, beta=0.1, sigma=0.1, u0=0.5, u1=0.5, seed=None, verbose=False):
         n_timesteps = int(T/dt + 0.5)
